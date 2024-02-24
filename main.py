@@ -1,33 +1,41 @@
-import sys
+import pandas as pd
+import numpy as np
+import os
+
 
 commands = """
 Commands:
  ~\'add task\'
  ~\'remove task\'
  ~\'tasks\'
+ ~\'clear\'
  ~\'help\'
  ~\'exit\' """
 
+
 class to_do_list():
     def __init__(self):
-        self.idx = 000
-        self.tasks = []
+        self.tasks = np.array([])
     
     def add_task(self, new_task):
-        self.idx += 1
-        self.tasks.append([self.idx, new_task])
+        self.tasks = np.append(self.tasks, [new_task], axis=0)
 
-    def remove_task(self):
+        self.df = pd.DataFrame(self.tasks)
+        self.df.rename(columns={0: "Task"}, inplace=True)
+
+        print("task added successfully")
+
+    def remove_task(self, idx):
         pass
 
-    def change_task(self):
+    def change_task(self, idx):
         pass
 
     def print_tasks(self):
-        pass
+        print('\n', self.df)
 
     def __repr__(self):
-        return str(self.tasks)
+        return str(self.df)
 
 
 def main():
@@ -39,22 +47,25 @@ def main():
 
     while run:
         print("\n///////////////////////////////")
-        option = str(input("Choose a option: "))
+        option = str(input("Choose a option: ")).strip()
 
-        if option == 'add task':
+        if option == 'add task' or option == 'add':
             my_list.add_task(str(input("Type the new task: ")))
         
         elif option == 'remove task':
             pass
         
         elif option == 'tasks':
-            print(my_list)
+            my_list.print_tasks()
         
         elif option == 'exit':
             run = False
         
         elif option == 'help':
             print(commands)
+        
+        elif option == 'clear':
+            os.system('cls')
 
         else:
             pass
